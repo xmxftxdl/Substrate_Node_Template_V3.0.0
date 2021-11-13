@@ -32,7 +32,7 @@ pub mod pallet {
     pub enum Event<T: Config> {
         ClaimCreated(T::AccountId, Vec<u8>),
         ClaimRemoved(T::AccountId, Vec<u8>),
-        ClaimOwnerChanged(T::AccountId, T::AccountId, Vec<u8>),
+        ClaimTransfer(T::AccountId, T::AccountId, Vec<u8>),
     }
 
 
@@ -45,7 +45,7 @@ pub mod pallet {
         NotClaimOwner,
 
         NotTransferOwner,
-        ErrorForTransferClaimUnauthorized,
+        ClaimNotauthorized,
     }
 
     #[pallet::hooks]
@@ -110,7 +110,7 @@ pub mod pallet {
                 Error::<T>::NotTransferOwner
             );
             Proofs::<T>::insert(&claim, (&newUser, block_Num));
-            Self::deposit_event(Event::ClaimOwnerChanged(owner, newUser, claim));
+            Self::deposit_event(Event::ClaimTransfer(owner, newUser, claim));
             Ok(().into())
         }
     }
